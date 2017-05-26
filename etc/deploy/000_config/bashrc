@@ -1,0 +1,17 @@
+# dotbash settings
+## alias
+alias less="less -XF"
+
+## history
+# 保存する履歴の数を設定する
+export HISTSIZE=10000
+# 保存する履歴に時刻を残す
+HISTTIMEFORMAT='%Y%m%d %T';
+export HISTTIMEFORMAT
+# 重複する履歴は保存しない
+export HISTCONTROL=ignoredups
+# 空白から始まるコマンドは保存しない
+export HISTCONTROL=ignorespace
+# 履歴に保存しないコマンドを設定する → fg, bg, date, jobs を対象外とする
+export HISTIGNORE="fg*:bg*:date*:jobs*"
+
