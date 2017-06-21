@@ -43,14 +43,16 @@ to_row=$(awk 'END{print NR}' ${bashrc})
 # ~/.bashrc から設定を切り出すための範囲を決める
 # ~/.bashrc に "# dotbash settings" と記述された行が存在する場合は、その上の行までが範囲
 # 記述された行が存在しない場合はファイル全体
-if [[ $(grep -q 'dotbash settings' ${bashrc}; echo $?) -eq 0 ]]; then
+$(grep -q 'dotbash settings' ${bashrc}) && {
   to_row=$(grep -n 'dotbash settings' ${bashrc} | awk -F: '{print $1}')
   to_row=$(expr $to_row - 1)
-fi
+}
 
 # テンポラリファイルに設定を切り出して、そこに設定を追記する
-sed -n ${from_row},${to_row}p ${bashrc} > $temp_file
-cat ${DOTBASH}/etc/deploy/000_config/bashrc >> $temp_file
+{
+  sed -n ${from_row},${to_row}p ${bashrc}
+  cat ${DOTBASH}/etc/deploy/000_config/bashrc
+} > $temp_file
 
 # dry-run の場合はテンポラリファイルを cat で出力した後に削除する
 if [ ! -z ${dryrun} ]; then
