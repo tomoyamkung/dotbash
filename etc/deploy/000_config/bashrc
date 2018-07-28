@@ -1,6 +1,7 @@
 # dotbash settings
 ## alias
 alias less="less -XF"
+alias ll='ls -al --time-style=long-iso --color=auto'
 
 ## history
 # 保存する履歴の数を設定する
