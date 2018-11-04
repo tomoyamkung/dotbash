@@ -34,6 +34,7 @@ $ . ~/.bashrc  # ~/.bashrc の設定を有効にする
 # dotbash settings
 ## alias
 alias less="less -XF"
+alias ll='ls -al --time-style=long-iso --color=auto'
 
 ## history
 # 保存する履歴の数を設定する
@@ -42,11 +43,22 @@ export HISTSIZE=10000
 HISTTIMEFORMAT='%Y%m%d %T';
 export HISTTIMEFORMAT
 # 重複する履歴は保存しない
-export HISTCONTROL=ignoredups
+export HISTCONTROL=ignoreboth:erasedups
 # 空白から始まるコマンドは保存しない
 export HISTCONTROL=ignorespace
 # 履歴に保存しないコマンドを設定する → fg, bg, date, jobs を対象外とする
 export HISTIGNORE="fg*:bg*:date*:jobs*"
+# コマンド履歴を共有する
+function share_history {
+  history -a
+  tac ~/.bash_history | awk '!a[$0]++' | tac > ~/.bash_history.tmp
+  mv ~/.bash_history{.tmp,}
+  history -c
+  history -r
+}
+PROMPT_COMMAND='share_history'
+shopt -u histappend
+
 ```
 
 ~/.bashrc が環境に存在する場合は、先頭から "# dotbash settings" とある行までを残すようになっており、それ以下の行は上記の内容で上書きする。なので、残しておきたい設定は "# dotbash settings" よりも上に書いておくこと。
