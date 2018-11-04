@@ -10,9 +10,19 @@ export HISTSIZE=10000
 HISTTIMEFORMAT='%Y%m%d %T';
 export HISTTIMEFORMAT
 # 重複する履歴は保存しない
-export HISTCONTROL=ignoredups
+export HISTCONTROL=ignoreboth:erasedups
 # 空白から始まるコマンドは保存しない
 export HISTCONTROL=ignorespace
 # 履歴に保存しないコマンドを設定する → fg, bg, date, jobs を対象外とする
 export HISTIGNORE="fg*:bg*:date*:jobs*"
+# コマンド履歴を共有する
+function share_history {
+  history -a
+  tac ~/.bash_history | awk '!a[$0]++' | tac > ~/.bash_history.tmp
+  mv ~/.bash_history{.tmp,}
+  history -c
+  history -r
+}
+PROMPT_COMMAND='share_history'
+shopt -u histappend
 
